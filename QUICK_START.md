@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Convert Markdown to PDF
-        uses: tmichett/gh-md2pdf-action@v1
+        uses: tmichett/gh-md2pdf-action@main  # Use @main until first release, then @v1.0.0
         with:
           files: README.md
           output_dir: Docs
@@ -78,28 +78,28 @@ The action will:
 
 ### Convert Single File
 ```yaml
-- uses: tmichett/gh-md2pdf-action@v1
+- uses: tmichett/gh-md2pdf-action@main  # Use @main or @v1.0.0 after release
   with:
     files: README.md
 ```
 
 ### Convert Multiple Files
 ```yaml
-- uses: tmichett/gh-md2pdf-action@v1
+- uses: tmichett/gh-md2pdf-action@main
   with:
     files: README.md,CHANGELOG.md,docs/guide.md
 ```
 
 ### Use Config File
 ```yaml
-- uses: tmichett/gh-md2pdf-action@v1
+- uses: tmichett/gh-md2pdf-action@main
   with:
     config_file: config.yaml
 ```
 
 ### Custom Output Directory
 ```yaml
-- uses: tmichett/gh-md2pdf-action@v1
+- uses: tmichett/gh-md2pdf-action@main
   with:
     files: README.md
     output_dir: pdfs

@@ -16,7 +16,7 @@ jobs:
       
       - name: Convert Markdown to PDF
         id: convert
-        uses: ./
+        uses: ./  # For local testing. Use tmichett/gh-md2pdf-action@main for published version
         with:
           # Option 1: Use config file
           config_file: config.yaml

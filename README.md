@@ -10,11 +10,15 @@ A GitHub Action to convert Markdown files to PDF with support for Mermaid diagra
 
 ```yaml
 - name: Convert Markdown to PDF
-  uses: tmichett/gh-md2pdf-action@v1
+  uses: tmichett/gh-md2pdf-action@main  # Use @main for latest, or @v1.0.0 for specific version
   with:
     files: README.md
     output_dir: Docs
 ```
+
+> **Note**: Until the first release is created, use `@main` to use the latest code. After creating a release (e.g., `v1.0.0`), you can use `@v1.0.0` or `@v1` (for latest v1.x.x).
+> 
+> **Need to create your first release?** See [FIRST_RELEASE.md](FIRST_RELEASE.md) for instructions.
 
 See [PUBLISHING.md](PUBLISHING.md) for instructions on publishing this action.
 
@@ -51,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Convert Markdown to PDF
-        uses: tmichett/gh-md2pdf-action@v1  # Use published action
+        uses: tmichett/gh-md2pdf-action@main  # Use @main for latest, or @v1.0.0 for specific version
         with:
           files: README.md
           output_dir: Docs
@@ -69,7 +73,7 @@ Convert multiple files using a comma-separated list:
 
 ```yaml
       - name: Convert Markdown to PDF
-        uses: tmichett/gh-md2pdf-action@v1
+        uses: tmichett/gh-md2pdf-action@main
         with:
           files: README.md,CHANGELOG.md,docs/guide.md
           output_dir: Docs
@@ -81,7 +85,7 @@ Use a YAML configuration file to specify files:
 
 ```yaml
 - name: Convert Markdown to PDF
-  uses: tmichett/gh-md2pdf-action@v1
+  uses: tmichett/gh-md2pdf-action@main
   with:
     config_file: config.yaml
     output_dir: Docs
@@ -117,7 +121,7 @@ jobs:
       
       - name: Convert Markdown to PDF
         id: convert
-        uses: tmichett/gh-md2pdf-action@v1
+        uses: tmichett/gh-md2pdf-action@main
         with:
           config_file: config.yaml
           output_dir: Docs
@@ -167,7 +171,7 @@ Example usage of outputs:
 ```yaml
 - name: Convert Markdown to PDF
   id: convert
-  uses: ./  # or your-username/gh-md2pdf-action@v1
+  uses: tmichett/gh-md2pdf-action@main
   with:
     files: README.md
 
@@ -291,18 +295,22 @@ See [MARKETPLACE.md](MARKETPLACE.md) for complete marketplace publishing instruc
 Once published, others can use your action:
 
 ```yaml
+# Use a specific version (after creating a release)
 - uses: tmichett/gh-md2pdf-action@v1.0.0
   with:
     files: README.md
-```
 
-Or use the latest version from a branch:
-
-```yaml
+# Or use the latest code from main branch
 - uses: tmichett/gh-md2pdf-action@main
   with:
     files: README.md
 ```
+
+> **Important**: Create your first release tag before others can use versioned releases:
+> ```bash
+> git tag -a v1.0.0 -m "Initial release"
+> git push origin v1.0.0
+> ```
 
 ## Contributing
 
