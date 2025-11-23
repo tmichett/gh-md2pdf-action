@@ -45,11 +45,11 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}},enable={{is_semver}}
-            type=semver,pattern={{major}}.{{minor}},enable={{is_semver}}
-            type=semver,pattern={{major}},enable={{is_semver}}
-            type=raw,value={{ref}},enable={{is_tag}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value={{ref}}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
