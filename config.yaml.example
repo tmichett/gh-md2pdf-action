@@ -1,17 +1,19 @@
 # Configuration file for markdown-to-pdf converter
 # List all markdown files you want to convert to PDF
 #
-# Each file should be specified with its path relative to the directory
-# where you run the run.sh script. The output PDF will be created in the
-# same location with a .pdf extension instead of .md
+# IMPORTANT: Use RELATIVE paths from the repository root
+# For GitHub Actions: Paths must be relative to the repository root
+# For local use: Paths can be relative or absolute (if files exist locally)
+#
+# The output PDF will be created in the output_dir specified in the action
 
 files:
-  - path: OLE_CLASSROOM_CONNECTIVITY_ANALYSIS.md
-  - path: RHTLC_COMPLETE_GUIDE.md
-  - path: RHTLC_USER_GUIDE.md
-  - path: RHTLC_SETUP_REQUIREMENTS.md
-  - path: RHTLC_INSTRUCTOR_GUIDE.md
-  # Add more files as needed:
-  # - path: docs/another-guide.md
-  # - path: subdirectory/documentation.md
+  - path: README.md
+  # Add more files as needed (use relative paths):
+  # - path: docs/user-guide.md
+  # - path: docs/developer-guide.md
+  # - path: CHANGELOG.md
+  #
+  # ❌ DON'T use absolute paths in GitHub Actions:
+  # - path: /Users/yourname/project/file.md  # This won't work!
 

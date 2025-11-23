@@ -1,0 +1,9 @@
+# Example configuration file for the GitHub Action
+# This file uses relative paths that exist in the repository
+
+files:
+  - path: README.md
+  # Add more files from the repository as needed:
+  # - path: docs/guide.md
+  # - path: CHANGELOG.md
+

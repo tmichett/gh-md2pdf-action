@@ -262,6 +262,13 @@ Or use the provided scripts:
 - Ensure the action has write permissions to the output directory
 - Check that Docker has proper permissions in the runner
 
+### File Not Found Errors
+
+- **Use relative paths** in config files, not absolute paths from your local machine
+- Files must exist in the repository (checked out by `actions/checkout`)
+- Example: Use `README.md` not `/Users/yourname/project/README.md`
+- See [EXAMPLE_WORKFLOW_FIX.md](EXAMPLE_WORKFLOW_FIX.md) for details
+
 ## Publishing This Action
 
 To publish this action for others to use:
