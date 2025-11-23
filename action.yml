@@ -1,5 +1,5 @@
 name: 'gh-md2pdf-action'
-description: 'Convert Markdown files to PDF with Mermaid diagram support, GitHub-style markdown rendering, and automatic PDF bookmarks. Perfect for generating documentation PDFs from your markdown files.'
+description: 'Convert Markdown to PDF with Mermaid diagrams, GitHub styling, and automatic bookmarks'
 author: 'tmichett'
 branding:
   icon: 'file-text'
