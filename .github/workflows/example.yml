@@ -21,7 +21,7 @@ jobs:
           # Option 1: Use file list directly (files that exist in this repo)
           files: README.md
           # Option 2: Or use a config file with relative paths
-          # config_file: .github/workflows/example-config.yaml
+          # config_file: example-config.yaml
           output_dir: Docs
           fail_on_error: false  # Set to false for example to not fail if files don't exist
       
