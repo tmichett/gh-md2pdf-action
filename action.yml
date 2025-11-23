@@ -1,0 +1,75 @@
+name: 'Markdown to PDF Converter'
+description: 'Convert Markdown files to PDF with Mermaid diagram support, GitHub-style markdown rendering, and automatic PDF bookmarks. Perfect for generating documentation PDFs from your markdown files.'
+author: 'tmichett'
+branding:
+  icon: 'file-text'
+  color: 'blue'
+
+inputs:
+  files:
+    description: 'Comma-separated list of markdown files to convert (relative to repository root)'
+    required: false
+  config_file:
+    description: 'Path to config.yaml file listing markdown files to convert'
+    required: false
+  output_dir:
+    description: 'Directory to output PDF files (default: Docs)'
+    required: false
+    default: 'Docs'
+  working_directory:
+    description: 'Working directory for file paths (default: repository root)'
+    required: false
+    default: '.'
+  fail_on_error:
+    description: 'Fail the action if any PDF conversion fails (default: true)'
+    required: false
+    default: 'true'
+  container_image:
+    description: 'Container image name to use (default: ghcr.io/tmichett/md2pdf:latest)'
+    required: false
+    default: 'ghcr.io/tmichett/md2pdf:latest'
+  build_container:
+    description: 'Build the container if it does not exist (default: true)'
+    required: false
+    default: 'true'
+
+outputs:
+  pdfs:
+    description: 'Comma-separated list of generated PDF files'
+  pdf_count:
+    description: 'Number of PDFs successfully generated'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build container if needed
+      shell: bash
+      if: inputs.build_container == 'true'
+      run: |
+        # Check if container exists locally
+        if ! docker image inspect ${{ inputs.container_image }} &>/dev/null; then
+          echo "Container image not found locally: ${{ inputs.container_image }}"
+          echo "Attempting to pull from registry..."
+          if docker pull ${{ inputs.container_image }} 2>/dev/null; then
+            echo "✅ Successfully pulled container image from registry"
+          else
+            echo "⚠️  Could not pull from registry, building locally..."
+            echo "Building container image: ${{ inputs.container_image }}"
+            docker build -f Containerfile -t ${{ inputs.container_image }} .
+          fi
+        else
+          echo "✅ Container image already exists locally: ${{ inputs.container_image }}"
+        fi
+    
+    - name: Convert Markdown to PDF
+      shell: bash
+      env:
+        FILES_INPUT: ${{ inputs.files }}
+        CONFIG_FILE: ${{ inputs.config_file }}
+        OUTPUT_DIR: ${{ inputs.output_dir }}
+        WORKING_DIR: ${{ inputs.working_directory }}
+        FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        CONTAINER_IMAGE: ${{ inputs.container_image }}
+      run: |
+        ${{ github.action_path }}/action-entrypoint.sh
+
