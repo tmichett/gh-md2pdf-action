@@ -1,4 +1,4 @@
-name: 'Markdown to PDF Converter'
+name: 'gh-md2pdf-action'
 description: 'Convert Markdown files to PDF with Mermaid diagram support, GitHub-style markdown rendering, and automatic PDF bookmarks. Perfect for generating documentation PDFs from your markdown files.'
 author: 'tmichett'
 branding:

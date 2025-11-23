@@ -144,3 +144,4 @@ docker push ghcr.io/tmichett/md2pdf:v1.0.0
 4. Try manual push to verify credentials work
 5. Review GitHub Actions documentation: https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
 
+
