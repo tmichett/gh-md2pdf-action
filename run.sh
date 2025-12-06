@@ -8,6 +8,20 @@ CONFIG_FILE="${CONFIG_FILE:-config.yaml}"
 IMAGE_NAME="${IMAGE_NAME:-md2pdf}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 
+# Detect host architecture for native container execution
+HOST_ARCH=$(uname -m)
+case "$HOST_ARCH" in
+    arm64|aarch64)
+        PLATFORM_FLAG="--platform linux/arm64"
+        ;;
+    x86_64|amd64)
+        PLATFORM_FLAG="--platform linux/amd64"
+        ;;
+    *)
+        PLATFORM_FLAG=""
+        ;;
+esac
+
 # Detect GitHub username from git remote or use environment variable
 if [ -z "$GITHUB_USER" ]; then
     GITHUB_USER=$(git remote get-url origin 2>/dev/null | sed -E 's/.*github.com[\/:]([^\/]+)\/.*/\1/' || echo "")
@@ -181,7 +195,7 @@ if [ "$USE_YQ" = true ]; then
         echo "📄 Processing $file_path -> $output_pdf"
         
         # Run container to convert markdown to PDF
-        if podman run --rm \
+        if podman run --rm $PLATFORM_FLAG \
             -v "$MOUNT_POINT:$MOUNT_POINT:Z" \
             "$FULL_IMAGE_NAME" \
             "$CONTAINER_INPUT" \
@@ -248,7 +262,7 @@ else
             echo "📄 Processing $file_path -> $output_pdf"
             
             # Run container to convert markdown to PDF
-            if podman run --rm \
+            if podman run --rm $PLATFORM_FLAG \
                 -v "$MOUNT_POINT:$MOUNT_POINT:Z" \
                 "$FULL_IMAGE_NAME" \
                 "$CONTAINER_INPUT" \

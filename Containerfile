@@ -1,15 +1,19 @@
 # Containerfile for Markdown to PDF conversion
 # Based on the GitHub Actions workflow build-pdfs.yml
+# Using Debian instead of Ubuntu - Debian has native Chromium (not snap)
 
-FROM ubuntu:latest
+FROM debian:bookworm-slim
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies
-# Note: We install Chromium dependencies but let Puppeteer download its own Chromium
-# This avoids issues with snap-based Chromium in containers
-# Handle package name differences between Ubuntu versions
+# Skip Puppeteer's bundled Chromium - we'll use system Chromium instead
+# This fixes ARM64/Apple Silicon compatibility issues
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Install system dependencies including native Chromium
+# Debian provides real Chromium packages (not snap wrappers like Ubuntu)
 RUN apt-get update && \
     apt-get install -y \
         nodejs \
@@ -23,6 +27,8 @@ RUN apt-get update && \
         fonts-noto-color-emoji \
         fonts-noto-core \
         fonts-noto-ui-core \
+        chromium \
+        libasound2 \
         libatk-bridge2.0-0 \
         libatk1.0-0 \
         libc6 \
@@ -32,6 +38,7 @@ RUN apt-get update && \
         libexpat1 \
         libfontconfig1 \
         libgbm1 \
+        libgcc-s1 \
         libglib2.0-0 \
         libgtk-3-0 \
         libnspr4 \
@@ -55,16 +62,12 @@ RUN apt-get update && \
         lsb-release \
         wget \
         xdg-utils \
+        procps \
         && \
-    (apt-get install -y libasound2t64 2>/dev/null || apt-get install -y libasound2 2>/dev/null || true) && \
-    (apt-get install -y libgcc-s1 2>/dev/null || apt-get install -y libgcc1 2>/dev/null || true) && \
-    (apt-get install -y fonts-emoji-one 2>/dev/null || true) && \
-    (apt-get install -y fonts-symbola 2>/dev/null || true) && \
     rm -rf /var/lib/apt/lists/* && \
     fc-cache -f -v
 
-# Install md-to-pdf globally
-# Let Puppeteer download Chromium automatically (removes need for system Chromium)
+# Install md-to-pdf globally (Chromium download is skipped via env var above)
 RUN npm install -g md-to-pdf
 
 # Install pypdf for PDF bookmarks

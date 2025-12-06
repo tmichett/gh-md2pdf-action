@@ -18,6 +18,40 @@ fi
 IMAGE_NAME="${IMAGE_NAME:-md2pdf}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 
+# Detect host architecture and set platform
+HOST_ARCH=$(uname -m)
+case "$HOST_ARCH" in
+    arm64|aarch64)
+        PLATFORM="linux/arm64"
+        ARCH_SUFFIX="-arm64"
+        echo "🖥️  Detected Apple Silicon / ARM64 architecture"
+        ;;
+    x86_64|amd64)
+        PLATFORM="linux/amd64"
+        ARCH_SUFFIX=""
+        echo "🖥️  Detected x86_64 / AMD64 architecture"
+        ;;
+    *)
+        echo "⚠️  Unknown architecture: $HOST_ARCH, defaulting to linux/amd64"
+        PLATFORM="linux/amd64"
+        ARCH_SUFFIX=""
+        ;;
+esac
+
+# Allow platform override via environment variable
+if [ -n "$BUILD_PLATFORM" ]; then
+    PLATFORM="$BUILD_PLATFORM"
+    echo "🔧 Platform override: $PLATFORM"
+fi
+
+# Allow forcing rebuild without cache (useful when switching architectures)
+if [ "${NO_CACHE:-false}" = "true" ]; then
+    CACHE_FLAG="--no-cache"
+    echo "🔄 Building without cache (fresh rebuild)"
+else
+    CACHE_FLAG=""
+fi
+
 # Build local image name
 LOCAL_IMAGE_NAME="${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -29,10 +63,11 @@ if [ -n "$GITHUB_USER" ]; then
 else
     echo "🔨 Building container image: $LOCAL_IMAGE_NAME"
 fi
+echo "   Platform: $PLATFORM"
 echo ""
 
-# Build the container
-podman build -f Containerfile -t "$LOCAL_IMAGE_NAME" .
+# Build the container with platform specification
+podman build $CACHE_FLAG --platform "$PLATFORM" -f Containerfile -t "$LOCAL_IMAGE_NAME" .
 
 if [ $? -eq 0 ]; then
     echo ""

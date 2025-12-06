@@ -31,12 +31,45 @@ h1, h2, h3 {
   widows: 3;
 }
 
-/* Prevent code blocks from breaking awkwardly */
-pre {
+/* Code block styling - wrap long lines instead of cutting off */
+/* Using high specificity selectors to override github-markdown-css */
+pre,
+.markdown-body pre,
+.markdown-body div.highlight pre,
+.markdown-body pre.highlight {
   page-break-inside: avoid;
   break-inside: avoid;
   orphans: 3;
   widows: 3;
+  white-space: pre-wrap !important;       /* Wrap text while preserving whitespace */
+  word-wrap: break-word !important;       /* Break long words if needed */
+  overflow-wrap: break-word !important;   /* Modern equivalent of word-wrap */
+  word-break: break-word !important;      /* Additional word breaking */
+  max-width: 100% !important;
+  overflow-x: visible !important;         /* Don't hide overflow */
+  overflow: visible !important;
+}
+
+/* Inline code and code inside pre blocks */
+code,
+.markdown-body code,
+.markdown-body tt {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+pre code,
+.markdown-body pre code,
+.markdown-body pre tt {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  display: block;
+  max-width: 100% !important;
+  overflow-x: visible !important;
 }
 
 /* Better spacing for lists */
